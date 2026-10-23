@@ -1,0 +1,157 @@
+
+{% extends 'base.html' %}
+{% block title %}System Administration{% endblock %}
+
+{% block content %}
+<section class="page-header admin-page-header">
+  <div class="admin-heading">
+    <span class="admin-eyebrow">AGNEL POLYTECHNIC · SHMS</span>
+    <h2>System Administration</h2>
+    <p>Manage accounts, seminar halls, system activity, and reports from one place.</p>
+  </div>
+
+  <div class="admin-header-actions">
+    <a href="{{ url_for('admin.users') }}" class="btn btn-outline">Manage Users</a>
+    <a href="{{ url_for('admin.halls') }}" class="btn btn-primary">Manage Halls</a>
+  </div>
+</section>
+
+<section class="card-grid admin-stat-grid" aria-label="System overview">
+  <article class="card stat-card admin-stat-card">
+    <div class="stat-icon admin-users-icon" aria-hidden="true">&#128101;</div>
+    <div class="admin-stat-content">
+      <div class="stat-label">Total Accounts</div>
+      <div class="stat-value">{{ total_users }}</div>
+      <p class="stat-description">Registered system users</p>
+    </div>
+  </article>
+
+  <article class="card stat-card admin-stat-card">
+    <div class="stat-icon admin-halls-icon" aria-hidden="true">&#127979;</div>
+    <div class="admin-stat-content">
+      <div class="stat-label">Seminar Halls</div>
+      <div class="stat-value">{{ total_halls }}</div>
+      <p class="stat-description">Listed in the hall directory</p>
+    </div>
+  </article>
+
+  <article class="card stat-card admin-stat-card">
+    <div class="stat-icon admin-bookings-icon" aria-hidden="true">&#128197;</div>
+    <div class="admin-stat-content">
+      <div class="stat-label">All-Time Bookings</div>
+      <div class="stat-value">{{ total_bookings }}</div>
+      <p class="stat-description">Booking requests recorded</p>
+    </div>
+  </article>
+
+  <article class="card stat-card admin-stat-card">
+    <div class="stat-icon admin-pending-icon" aria-hidden="true">&#9203;</div>
+    <div class="admin-stat-content">
+      <div class="stat-label">Awaiting Decision</div>
+      <div class="stat-value">{{ pending_bookings }}</div>
+      <p class="stat-description">Requests pending review</p>
+    </div>
+  </article>
+</section>
+
+<section class="dashboard-section admin-dashboard-section"
+         aria-labelledby="admin-actions-title">
+  <div class="section-heading">
+    <div>
+      <h3 id="admin-actions-title">Administration</h3>
+      <p>Quick access to the main system management tools.</p>
+    </div>
+  </div>
+
+  <div class="card-grid admin-action-grid">
+    <article class="card admin-action-card">
+      <div class="action-icon admin-halls-icon" aria-hidden="true">&#127979;</div>
+      <h3 class="card-title">Seminar Halls</h3>
+      <p>Manage venues, seating capacity, equipment, and hall information.</p>
+      <a href="{{ url_for('admin.halls') }}" class="btn btn-outline">
+        Open Hall Directory <span aria-hidden="true">&rarr;</span>
+      </a>
+    </article>
+
+    <article class="card admin-action-card">
+      <div class="action-icon admin-users-icon" aria-hidden="true">&#128100;</div>
+      <h3 class="card-title">User Accounts</h3>
+      <p>Create accounts, manage user roles, and update account status.</p>
+      <a href="{{ url_for('admin.users') }}" class="btn btn-outline">
+        Manage Accounts <span aria-hidden="true">&rarr;</span>
+      </a>
+    </article>
+
+    <article class="card admin-action-card">
+      <div class="action-icon admin-audit-icon" aria-hidden="true">&#128220;</div>
+      <h3 class="card-title">Security Audit Trail</h3>
+      <p>Review recorded system events, administrative actions, and audit details.</p>
+      <a href="{{ url_for('admin.audit_logs') }}" class="btn btn-outline">
+        View Audit Logs <span aria-hidden="true">&rarr;</span>
+      </a>
+    </article>
+
+    <article class="card admin-action-card">
+      <div class="action-icon admin-reports-icon" aria-hidden="true">&#128202;</div>
+      <h3 class="card-title">Utilization Reports</h3>
+      <p>Review seminar hall utilization information and booking statistics.</p>
+      <a href="{{ url_for('admin.reports') }}" class="btn btn-outline">
+        Open Reports <span aria-hidden="true">&rarr;</span>
+      </a>
+    </article>
+  </div>
+</section>
+
+<section class="dashboard-section audit-section admin-dashboard-section"
+         aria-labelledby="audit-events-title">
+  <div class="section-heading admin-audit-heading">
+    <div>
+      <h3 id="audit-events-title">Recent System Activity</h3>
+      <p>A record of recent administrative and system events.</p>
+    </div>
+    <a href="{{ url_for('admin.audit_logs') }}" class="text-link">
+      View all logs <span aria-hidden="true">&rarr;</span>
+    </a>
+  </div>
+
+  <div class="card audit-card">
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th scope="col">Timestamp</th>
+            <th scope="col">Action</th>
+            <th scope="col">Target</th>
+            <th scope="col">Details</th>
+            <th scope="col">IP Address</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if recent_logs %}
+            {% for log in recent_logs %}
+              <tr>
+                <td>
+                  <span class="audit-timestamp">{{ log.timestamp.strftime('%d %b %Y') }}</span>
+                  <small>{{ log.timestamp.strftime('%H:%M:%S') }}</small>
+                </td>
+                <td><code>{{ log.action }}</code></td>
+                <td>{{ log.target_type }} #{{ log.target_id or 'N/A' }}</td>
+                <td class="audit-details">{{ log.details }}</td>
+                <td><small>{{ log.ip_address or 'N/A' }}</small></td>
+              </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td colspan="5" class="table-empty-state">
+                <span class="empty-state-icon" aria-hidden="true">&#128203;</span>
+                <strong>No audit activity yet</strong>
+                <span>System events will appear here when recorded.</span>
+              </td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+{% endblock %}

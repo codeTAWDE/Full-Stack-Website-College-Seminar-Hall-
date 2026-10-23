@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block title %}Pending Approvals{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h2>Pending Booking Requests</h2>
+    <p>Review faculty reservations, verify conflict status, and authorize hall allocations.</p>
+  </div>
+  <div>
+    <a href="{{ url_for('principal.dashboard') }}" class="btn btn-outline">&larr; Back to Dashboard</a>
+  </div>
+</div>
+
+<div class="table-responsive">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Reference</th>
+        <th>Faculty Applicant</th>
+        <th>Venue</th>
+        <th>Event Title</th>
+        <th>Date</th>
+        <th>Time Window</th>
+        <th>Expected</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if bookings.items %}
+        {% for b in bookings.items %}
+          <tr>
+            <td><code>{{ b.booking_reference }}</code></td>
+            <td>
+              <strong>{{ b.applicant.name }}</strong><br>
+              <small style="color: var(--text-muted);">{{ b.applicant.department or 'Academic' }}</small>
+            </td>
+            <td>{{ b.hall.name }}</td>
+            <td>{{ b.event_title }}</td>
+            <td>{{ b.booking_date.strftime('%d %b %Y') }}</td>
+            <td>{{ b.start_time.strftime('%H:%M') }} - {{ b.end_time.strftime('%H:%M') }}</td>
+            <td>{{ b.attendees_count }}</td>
+            <td>
+              <a href="{{ url_for('principal.review_booking', booking_id=b.id) }}" class="btn btn-sm btn-primary">Review Request</a>
+            </td>
+          </tr>
+        {% endfor %}
+      {% else %}
+        <tr>
+          <td colspan="8" style="text-align: center; color: var(--text-muted); padding: 32px;">
+            No seminar bookings currently pending approval.
+          </td>
+        </tr>
+      {% endif %}
+    </tbody>
+  </table>
+</div>
+
+<!-- Pagination -->
+{% if bookings.pages > 1 %}
+  <ul class="pagination">
+    {% for page_num in bookings.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+      {% if page_num %}
+        {% if bookings.page == page_num %}
+          <li class="active"><span>{{ page_num }}</span></li>
+        {% else %}
+          <li><a href="{{ url_for('principal.pending_approvals', page=page_num) }}">{{ page_num }}</a></li>
+        {% endif %}
+      {% else %}
+        <li><span>...</span></li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+{% endif %}
+{% endblock %}

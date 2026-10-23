@@ -1,0 +1,1 @@
+"""Automated Test Package for Seminar Hall Management System."""

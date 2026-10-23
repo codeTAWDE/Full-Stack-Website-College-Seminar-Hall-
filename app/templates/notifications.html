@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Notifications{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h2>Your Notifications</h2>
+    <p>Alerts regarding your seminar hall reservation requests, approvals, and decisions.</p>
+  </div>
+</div>
+
+<div class="card" style="padding: 0;">
+  <ul style="list-style: none;">
+    {% if notifications and notifications|length > 0 %}
+      {% for n in notifications %}
+        <li style="padding: 16px 20px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; background-color: {{ '#f0f9ff' if not n.is_read else '#ffffff' }};">
+          <div>
+            <h4 style="font-size: 1rem; color: #0b2545; margin-bottom: 4px;">{{ n.title }}</h4>
+            <p style="font-size: 0.9rem; color: #1e293b; margin-bottom: 4px;">{{ n.message }}</p>
+            <small style="color: #64748b;">
+              {{ n.created_at.strftime('%d %b %Y, %H:%M') if n.created_at else '' }}
+            </small>
+          </div>
+          {% if n.link %}
+            <div>
+              <a href="{{ n.link }}" class="btn btn-sm btn-outline">View Details</a>
+            </div>
+          {% endif %}
+        </li>
+      {% endfor %}
+    {% else %}
+      <li style="padding: 32px; text-align: center; color: #64748b;">
+        You have no notifications at this time.
+      </li>
+    {% endif %}
+  </ul>
+</div>
+{% endblock %}

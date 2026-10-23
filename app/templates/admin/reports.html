@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block title %}Facility Reports{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h2>Seminar Hall Utilization Reports</h2>
+    <p>Analytical breakdown of seminar hall demand and allocation metrics.</p>
+  </div>
+  <div>
+    <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline">&larr; Back to Dashboard</a>
+  </div>
+</div>
+
+<div class="card-grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));">
+  <!-- Utilization by Hall -->
+  <div class="card">
+    <h3 class="card-title" style="border-bottom: 2px solid var(--border-subtle); padding-bottom: 8px; margin-bottom: 16px;">
+      Total Bookings by Seminar Hall
+    </h3>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Seminar Hall</th>
+          <th>Total Requests</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for hall_name, count in bookings_by_hall %}
+          <tr>
+            <td><strong>{{ hall_name }}</strong></td>
+            <td>{{ count }}</td>
+          </tr>
+        {% else %}
+          <tr>
+            <td colspan="2" style="text-align: center; color: var(--text-muted);">No booking data recorded.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Status Distribution -->
+  <div class="card">
+    <h3 class="card-title" style="border-bottom: 2px solid var(--border-subtle); padding-bottom: 8px; margin-bottom: 16px;">
+      Request Status Distribution
+    </h3>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Booking Status</th>
+          <th>Count</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for status_val, count in bookings_by_status %}
+          <tr>
+            <td>
+              {% if status_val == 'APPROVED' %}
+                <span class="badge badge-approved">Approved</span>
+              {% elif status_val == 'PENDING' %}
+                <span class="badge badge-pending">Pending</span>
+              {% elif status_val == 'REJECTED' %}
+                <span class="badge badge-rejected">Rejected</span>
+              {% else %}
+                <span class="badge badge-cancelled">Cancelled</span>
+              {% endif %}
+            </td>
+            <td><strong>{{ count }}</strong></td>
+          </tr>
+        {% else %}
+          <tr>
+            <td colspan="2" style="text-align: center; color: var(--text-muted);">No status metrics available.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

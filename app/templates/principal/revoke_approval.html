@@ -1,0 +1,71 @@
+
+{% extends 'base.html' %}
+{% block title %}Revoke Booking Approval{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h2>Reject Approved Booking</h2>
+    <p>Confirm the change to a previously approved reservation.</p>
+  </div>
+  <a href="{{ url_for('principal.approved_bookings') }}"
+     class="btn btn-outline">Cancel</a>
+</div>
+
+<div class="card" style="max-width: 760px; margin: 0 auto;">
+  <h3>{{ booking.event_title }}</h3>
+
+  <p><strong>Reference:</strong>
+    {{ booking.booking_reference }}</p>
+  <p><strong>Faculty:</strong>
+    {{ booking.applicant.name }}</p>
+  <p><strong>Venue:</strong>
+    {{ booking.hall.name }}</p>
+  <p><strong>Date:</strong>
+    {{ booking.booking_date.strftime('%d %B %Y') }}</p>
+  <p><strong>Time:</strong>
+    {{ booking.start_time.strftime('%H:%M') }}
+    - {{ booking.end_time.strftime('%H:%M') }}</p>
+
+  <div class="card"
+       style="background: var(--bg-surface-alt); margin: 20px 0;">
+    <strong>Important:</strong>
+    The booking status will change from APPROVED to REJECTED.
+    The Faculty member will receive an in-app notification and an
+    email attempt explaining the change.
+  </div>
+
+  <form method="POST"
+        onsubmit="return confirm('Are you sure you want to revoke this approval and reject the booking?');">
+    {{ form.hidden_tag() }}
+
+    <input type="hidden" name="action" value="REJECT">
+
+    <div class="form-group">
+      <label class="form-label" for="rejection_reason">
+        Reason for revoking approval (required)
+      </label>
+      {{ form.rejection_reason(
+          class="form-control",
+          rows=4,
+          placeholder="Explain why the previously approved booking is now being rejected.",
+          id="rejection_reason",
+          required=true
+      ) }}
+      {% for error in form.rejection_reason.errors %}
+        <div class="form-error">{{ error }}</div>
+      {% endfor %}
+    </div>
+
+    {% for error in form.action.errors %}
+      <div class="form-error">{{ error }}</div>
+    {% endfor %}
+
+    <button type="submit"
+            class="btn btn-primary"
+            style="width:100%; margin-top:12px;">
+      Confirm Rejection
+    </button>
+  </form>
+</div>
+{% endblock %}

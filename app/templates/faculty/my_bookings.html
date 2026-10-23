@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block title %}My Booking History{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h2>My Booking History</h2>
+    <p>Track statuses, approvals, and cancellations of your submitted seminar requests.</p>
+  </div>
+  <div>
+    <a href="{{ url_for('faculty.new_booking') }}" class="btn btn-primary">+ New Request</a>
+  </div>
+</div>
+
+<!-- Status Filters -->
+<div style="display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap;">
+  <a href="{{ url_for('faculty.my_bookings') }}" class="btn btn-sm {% if not current_status %}btn-primary{% else %}btn-outline{% endif %}">All</a>
+  <a href="{{ url_for('faculty.my_bookings', status='PENDING') }}" class="btn btn-sm {% if current_status == 'PENDING' %}btn-primary{% else %}btn-outline{% endif %}">Pending</a>
+  <a href="{{ url_for('faculty.my_bookings', status='APPROVED') }}" class="btn btn-sm {% if current_status == 'APPROVED' %}btn-primary{% else %}btn-outline{% endif %}">Approved</a>
+  <a href="{{ url_for('faculty.my_bookings', status='REJECTED') }}" class="btn btn-sm {% if current_status == 'REJECTED' %}btn-primary{% else %}btn-outline{% endif %}">Rejected</a>
+  <a href="{{ url_for('faculty.my_bookings', status='CANCELLED') }}" class="btn btn-sm {% if current_status == 'CANCELLED' %}btn-primary{% else %}btn-outline{% endif %}">Cancelled</a>
+</div>
+
+<div class="table-responsive">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Reference</th>
+        <th>Hall</th>
+        <th>Event Title</th>
+        <th>Date</th>
+        <th>Time Window</th>
+        <th>Attendees</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if bookings.items %}
+        {% for b in bookings.items %}
+          <tr>
+            <td><code>{{ b.booking_reference }}</code></td>
+            <td>{{ b.hall.name }}</td>
+            <td><strong>{{ b.event_title }}</strong></td>
+            <td>{{ b.booking_date.strftime('%d %b %Y') }}</td>
+            <td>{{ b.start_time.strftime('%H:%M') }} - {{ b.end_time.strftime('%H:%M') }}</td>
+            <td>{{ b.attendees_count }}</td>
+            <td>
+              {% if b.status == 'PENDING' %}
+                <span class="badge badge-pending">Pending Review</span>
+              {% elif b.status == 'APPROVED' %}
+                <span class="badge badge-approved">Approved</span>
+              {% elif b.status == 'REJECTED' %}
+                <span class="badge badge-rejected">Rejected</span>
+              {% else %}
+                <span class="badge badge-cancelled">Cancelled</span>
+              {% endif %}
+            </td>
+            <td>
+              <a href="{{ url_for('faculty.booking_detail', booking_id=b.id) }}" class="btn btn-sm btn-outline">View</a>
+            </td>
+          </tr>
+        {% endfor %}
+      {% else %}
+        <tr>
+          <td colspan="8" style="text-align: center; color: var(--text-muted); padding: 32px;">
+            No bookings found under this filter.
+          </td>
+        </tr>
+      {% endif %}
+    </tbody>
+  </table>
+</div>
+
+<!-- Pagination -->
+{% if bookings.pages > 1 %}
+  <ul class="pagination">
+    {% for page_num in bookings.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+      {% if page_num %}
+        {% if bookings.page == page_num %}
+          <li class="active"><span>{{ page_num }}</span></li>
+        {% else %}
+          <li><a href="{{ url_for('faculty.my_bookings', page=page_num, status=current_status) }}">{{ page_num }}</a></li>
+        {% endif %}
+      {% else %}
+        <li><span>...</span></li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+{% endif %}
+{% endblock %}

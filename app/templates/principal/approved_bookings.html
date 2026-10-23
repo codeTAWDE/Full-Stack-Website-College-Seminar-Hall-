@@ -1,0 +1,77 @@
+
+{% extends 'base.html' %}
+{% block title %}Manage Approved Bookings{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h2>Manage Approved Bookings</h2>
+    <p>Review approved seminar hall reservations and revoke an approval when necessary.</p>
+  </div>
+  <a href="{{ url_for('principal.dashboard') }}"
+     class="btn btn-outline">Back to Dashboard</a>
+</div>
+
+<div class="table-responsive">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Reference</th>
+        <th>Faculty</th>
+        <th>Venue</th>
+        <th>Event</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for b in bookings.items %}
+      <tr>
+        <td><code>{{ b.booking_reference }}</code></td>
+        <td>{{ b.applicant.name }}</td>
+        <td>{{ b.hall.name }}</td>
+        <td>{{ b.event_title }}</td>
+        <td>{{ b.booking_date.strftime('%d %b %Y') }}</td>
+        <td>
+          {{ b.start_time.strftime('%H:%M') }}
+          - {{ b.end_time.strftime('%H:%M') }}
+        </td>
+        <td>
+          <a href="{{ url_for(
+              'principal.revoke_approval',
+              booking_id=b.id
+          ) }}"
+             class="btn btn-sm btn-outline">
+            Reject Approved Booking
+          </a>
+        </td>
+      </tr>
+      {% else %}
+      <tr>
+        <td colspan="7" style="text-align:center; padding:24px;">
+          No approved bookings found.
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% if bookings.pages > 1 %}
+<ul class="pagination">
+  {% for page_num in bookings.iter_pages() %}
+    {% if page_num %}
+      <li>
+        <a href="{{ url_for(
+            'principal.approved_bookings',
+            page=page_num
+        ) }}">{{ page_num }}</a>
+      </li>
+    {% else %}
+      <li><span>...</span></li>
+    {% endif %}
+  {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}

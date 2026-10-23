@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% block title %}Faculty Dashboard{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h2>Faculty Portal</h2>
+    <p>Welcome, Prof. {{ current_user.name }} &bull; Department of {{ current_user.department or 'Academic Affairs' }}</p>
+  </div>
+  <div>
+    <a href="{{ url_for('faculty.new_booking') }}" class="btn btn-primary">+ New Booking Request</a>
+  </div>
+</div>
+
+<!-- Stat Metric Cards -->
+<div class="card-grid">
+  <div class="card stat-card">
+    <div class="stat-icon">&#128197;</div>
+    <div>
+      <div class="stat-value">{{ total_bookings }}</div>
+      <div class="stat-label">Total Requests</div>
+    </div>
+  </div>
+
+  <div class="card stat-card">
+    <div class="stat-icon" style="color: var(--status-pending);">&#9203;</div>
+    <div>
+      <div class="stat-value">{{ pending_bookings }}</div>
+      <div class="stat-label">Pending Approval</div>
+    </div>
+  </div>
+
+  <div class="card stat-card">
+    <div class="stat-icon" style="color: var(--status-approved);">&#10004;</div>
+    <div>
+      <div class="stat-value">{{ approved_bookings }}</div>
+      <div class="stat-label">Approved</div>
+    </div>
+  </div>
+
+  <div class="card stat-card">
+    <div class="stat-icon" style="color: var(--status-rejected);">&#10006;</div>
+    <div>
+      <div class="stat-value">{{ rejected_bookings }}</div>
+      <div class="stat-label">Rejected</div>
+    </div>
+  </div>
+</div>
+
+<!-- Recent Submissions -->
+<div style="margin-top: 24px;">
+  <div class="section-heading">
+    <h3 style="color: var(--brand-primary);">Your Recent Booking Requests</h3>
+    <a href="{{ url_for('faculty.my_bookings') }}" class="btn btn-sm btn-outline">View All My Bookings &rarr;</a>
+  </div>
+
+  <div class="table-responsive">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Reference</th>
+          <th>Seminar Hall</th>
+          <th>Event Title</th>
+          <th>Date</th>
+          <th>Time Window</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if recent_bookings %}
+          {% for b in recent_bookings %}
+            <tr>
+              <td><code>{{ b.booking_reference }}</code></td>
+              <td>{{ b.hall.name }}</td>
+              <td><strong>{{ b.event_title }}</strong></td>
+              <td>{{ b.booking_date.strftime('%d %b %Y') }}</td>
+              <td>{{ b.start_time.strftime('%H:%M') }} - {{ b.end_time.strftime('%H:%M') }}</td>
+              <td>
+                {% if b.status == 'PENDING' %}
+                  <span class="badge badge-pending">Pending Review</span>
+                {% elif b.status == 'APPROVED' %}
+                  <span class="badge badge-approved">Approved</span>
+                {% elif b.status == 'REJECTED' %}
+                  <span class="badge badge-rejected">Rejected</span>
+                {% else %}
+                  <span class="badge badge-cancelled">Cancelled</span>
+                {% endif %}
+              </td>
+              <td>
+                <a href="{{ url_for('faculty.booking_detail', booking_id=b.id) }}" class="btn btn-sm btn-outline">Details</a>
+              </td>
+            </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 24px;">
+              You have not submitted any seminar hall booking requests yet.
+            </td>
+          </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

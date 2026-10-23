@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}Seminar Venues Catalog{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h2>Campus Seminar Facilities</h2>
+    <p>Comprehensive list of seminar venues, audio-visual amenities, and seating capacity at Agnel Polytechnic.</p>
+  </div>
+</div>
+
+<div class="card-grid">
+  {% for hall in halls %}
+    <div class="card">
+      <div class="hall-thumbnail">
+        <span>{{ hall.code }}</span>
+      </div>
+      <h3 class="card-title">{{ hall.name }}</h3>
+      <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 12px;">
+        <strong>Campus Block:</strong> {{ hall.location }}<br>
+        <strong>Seating Capacity:</strong> {{ hall.capacity }} Attendees
+      </p>
+      
+      <h4 style="font-size: 0.85rem; text-transform: uppercase; color: var(--brand-primary); margin-bottom: 6px;">Available Equipment:</h4>
+      <ul style="font-size: 0.85rem; margin-left: 20px; color: var(--text-muted); margin-bottom: 16px;">
+        {% for eq in hall.equipment %}
+          <li>{{ eq.name }} (x{{ eq.quantity }}) - {{ eq.status }}</li>
+        {% else %}
+          <li>Standard Audio/Visual Projection & Sound System</li>
+        {% endfor %}
+      </ul>
+
+      <div style="margin-top: auto; display: flex; justify-content: space-between; align-items: center;">
+        <span class="badge {% if hall.is_active %}badge-approved{% else %}badge-rejected{% endif %}">
+          {{ "Available" if hall.is_active else "Under Maintenance" }}
+        </span>
+        {% if current_user.is_authenticated and (current_user.is_faculty() or current_user.is_admin()) %}
+          <a href="{{ url_for('faculty.new_booking') }}" class="btn btn-sm btn-primary">Book Venue</a>
+        {% endif %}
+      </div>
+    </div>
+  {% else %}
+    <p style="color: var(--text-muted);">No seminar halls currently registered.</p>
+  {% endfor %}
+</div>
+{% endblock %}

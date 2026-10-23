@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block title %}Manage Users{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h2>User Account Directory</h2>
+    <p>Manage faculty, principal, and administrative accounts and access rights.</p>
+  </div>
+  <div>
+    <a href="{{ url_for('admin.create_user') }}" class="btn btn-primary">+ Create New User</a>
+  </div>
+</div>
+
+<div class="table-responsive">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Full Name</th>
+        <th>Email Address</th>
+        <th>Role</th>
+        <th>Department</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if users.items %}
+        {% for u in users.items %}
+          <tr>
+            <td><strong>{{ u.name }}</strong></td>
+            <td>{{ u.email }}</td>
+            <td>
+              <span class="badge {% if u.role == 'ADMIN' %}badge-rejected{% elif u.role == 'PRINCIPAL' %}badge-approved{% else %}badge-active{% endif %}">
+                {{ u.role }}
+              </span>
+            </td>
+            <td>{{ u.department or 'N/A' }}</td>
+            <td>
+              <span class="badge {% if u.is_active %}badge-approved{% else %}badge-rejected{% endif %}">
+                {{ 'Active' if u.is_active else 'Deactivated' }}
+              </span>
+            </td>
+            <td>
+              <div style="display: flex; gap: 8px;">
+                <a href="{{ url_for('admin.edit_user', user_id=u.id) }}" class="btn btn-sm btn-outline">Edit</a>
+                {% if u.id != current_user.id %}
+                  <form action="{{ url_for('admin.toggle_user', user_id=u.id) }}" method="POST" style="display:inline;">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    <button type="submit" class="btn btn-sm {% if u.is_active %}btn-danger{% else %}btn-success{% endif %}">
+                      {{ 'Deactivate' if u.is_active else 'Activate' }}
+                    </button>
+                  </form>
+                {% endif %}
+              </div>
+            </td>
+          </tr>
+        {% endfor %}
+      {% else %}
+        <tr>
+          <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 24px;">
+            No users registered.
+          </td>
+        </tr>
+      {% endif %}
+    </tbody>
+  </table>
+</div>
+
+<!-- Pagination -->
+{% if users.pages > 1 %}
+  <ul class="pagination">
+    {% for page_num in users.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+      {% if page_num %}
+        {% if users.page == page_num %}
+          <li class="active"><span>{{ page_num }}</span></li>
+        {% else %}
+          <li><a href="{{ url_for('admin.users', page=page_num) }}">{{ page_num }}</a></li>
+        {% endif %}
+      {% else %}
+        <li><span>...</span></li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+{% endif %}
+{% endblock %}

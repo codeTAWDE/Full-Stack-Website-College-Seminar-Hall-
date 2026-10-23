@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}Master Event Calendar{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h2>Master Booking Calendar</h2>
+    <p>Live schedule of approved academic and institutional seminar hall bookings.</p>
+  </div>
+  <div>
+    <select id="hallFilterSelect" class="form-control" style="min-width: 220px;" aria-label="Filter bookings by hall">
+      <option value="">All Seminar Halls</option>
+      {% for hall in halls %}
+        <option value="{{ hall.id }}">{{ hall.name }} ({{ hall.code }})</option>
+      {% endfor %}
+    </select>
+  </div>
+</div>
+
+<div class="card" style="padding: 16px;">
+  <div id="shmsCalendar" style="min-height: 600px;"></div>
+</div>
+
+<!-- Event Inspection Modal Dialog -->
+<div id="eventDetailsModal" style="display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);">
+  <div class="card" style="max-width: 500px; margin: 100px auto; position: relative;">
+    <h3 id="modalEventTitle" class="card-title" style="border-bottom: 1px solid var(--border-subtle); padding-bottom: 8px;"></h3>
+    <div id="modalEventBody" style="margin: 16px 0; font-size: 0.95rem;"></div>
+    <div style="text-align: right; margin-top: 16px;">
+      <button id="modalCloseBtn" class="btn btn-sm btn-outline">Close</button>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/calendar.js') }}"></script>
+{% endblock %}

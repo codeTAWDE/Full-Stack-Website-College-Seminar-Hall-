@@ -1,0 +1,73 @@
+
+{% extends 'base.html' %}
+{% block title %}Sign In{% endblock %}
+
+{% block content %}
+<div class="login-page">
+  <div class="login-card">
+
+    <div class="login-brand">
+      <img
+        src="{{ url_for('static', filename='images/agnel-polytechnic-logo.jpeg') }}"
+        alt="Agnel Polytechnic logo"
+        class="login-logo"
+        onerror="this.style.display='none'"
+      >
+
+      <div class="login-accent"></div>
+
+      <p class="login-institution">AGNEL POLYTECHNIC</p>
+      <h2>Welcome Back</h2>
+      <p class="login-subtitle">
+        Sign in to access the Seminar Hall Management System.
+      </p>
+    </div>
+
+    <div class="login-divider"></div>
+
+    <form method="POST" action="{{ url_for('auth.login', next=request.args.get('next')) }}">
+      {{ form.hidden_tag() }}
+
+      <div class="form-group">
+        <label class="form-label" for="email">{{ form.email.label.text }}</label>
+        {{ form.email(class="form-control", placeholder="Enter your college email", id="email", autocomplete="email") }}
+        {% for error in form.email.errors %}
+          <div class="form-error">{{ error }}</div>
+        {% endfor %}
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">{{ form.password.label.text }}</label>
+
+        <div class="login-password-field">
+          {{ form.password(class="form-control", placeholder="Enter your password", id="password", autocomplete="current-password") }}
+          <button
+            type="button"
+            class="btn btn-sm btn-outline password-toggle-btn"
+            data-target="password"
+          >Show</button>
+        </div>
+
+        {% for error in form.password.errors %}
+          <div class="form-error">{{ error }}</div>
+        {% endfor %}
+      </div>
+
+      <div class="form-check login-remember">
+        {{ form.remember_me(id="remember_me") }}
+        <label for="remember_me">{{ form.remember_me.label.text }}</label>
+      </div>
+
+      <button type="submit" class="btn btn-primary login-submit">
+        Sign In
+      </button>
+    </form>
+
+    <div class="login-footer">
+      <a href="{{ url_for('auth.reset_request') }}">Forgot your password?</a>
+      <p>Authorised staff and administration access only.</p>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block title %}System Audit Trail{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h2>Security Audit Trail</h2>
+    <p>Immutable log of authentication, booking approvals, and administrative events.</p>
+  </div>
+  <div>
+    <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline">&larr; Back to Dashboard</a>
+  </div>
+</div>
+
+<!-- Action Filter Form -->
+<form method="GET" action="{{ url_for('admin.audit_logs') }}" style="margin-bottom: 20px; display: flex; gap: 10px;">
+  <input type="text" name="action" value="{{ action_filter }}" placeholder="Filter by action (e.g. LOGIN, APPROVE, CREATE)..." class="form-control" style="max-width: 380px;">
+  <button type="submit" class="btn btn-primary">Filter</button>
+  {% if action_filter %}
+    <a href="{{ url_for('admin.audit_logs') }}" class="btn btn-outline">Clear</a>
+  {% endif %}
+</form>
+
+<div class="table-responsive">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Timestamp (UTC)</th>
+        <th>User Account</th>
+        <th>Action Event</th>
+        <th>Target</th>
+        <th>Details</th>
+        <th>Origin IP</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if logs.items %}
+        {% for l in logs.items %}
+          <tr>
+            <td>{{ l.timestamp.strftime('%d %b %Y, %H:%M:%S') }}</td>
+            <td>
+              {% if l.user %}
+                <strong>{{ l.user.name }}</strong> ({{ l.user.email }})
+              {% else %}
+                <span style="color: var(--text-muted);">Anonymous / System</span>
+              {% endif %}
+            </td>
+            <td><code>{{ l.action }}</code></td>
+            <td>{{ l.target_type }} #{{ l.target_id or 'N/A' }}</td>
+            <td>{{ l.details }}</td>
+            <td><small>{{ l.ip_address or 'Unknown' }}</small></td>
+          </tr>
+        {% endfor %}
+      {% else %}
+        <tr>
+          <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 32px;">
+            No audit records found matching your filter criteria.
+          </td>
+        </tr>
+      {% endif %}
+    </tbody>
+  </table>
+</div>
+
+<!-- Pagination -->
+{% if logs.pages > 1 %}
+  <ul class="pagination">
+    {% for page_num in logs.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+      {% if page_num %}
+        {% if logs.page == page_num %}
+          <li class="active"><span>{{ page_num }}</span></li>
+        {% else %}
+          <li><a href="{{ url_for('admin.audit_logs', page=page_num, action=action_filter) }}">{{ page_num }}</a></li>
+        {% endif %}
+      {% else %}
+        <li><span>...</span></li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+{% endif %}
+{% endblock %}

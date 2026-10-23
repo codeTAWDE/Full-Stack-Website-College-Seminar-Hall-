@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Seminar Hall Management System{% endblock %} &bull; Agnel Polytechnic</title>
+  
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  
+  <!-- FullCalendar 6 Dependencies -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+  <!-- Institutional Top Bar -->
+  <div class="top-bar">
+    <div class="top-bar-title">AGNEL TECHNICAL EDUCATION COMPLEX &bull; VASHI, NAVI MUMBAI</div>
+    <div>
+      {% if current_user.is_authenticated %}
+        <span>Signed in as <strong>{{ current_user.name }}</strong> ({{ current_user.role }})</span>
+      {% else %}
+        <span>College Seminar Reservation Portal</span>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Main Navigation Header -->
+  <header class="site-header">
+    <div class="nav-container">
+      <div class="brand-wrapper">
+        <a href="{{ url_for('main.index') }}" style="display: flex; align-items: center; gap: 12px; text-decoration: none; min-width: 0;">
+          <img src="{{ url_for('static', filename='images/agnel-polytechnic-logo.jpeg') }}" 
+               alt="Agnel Polytechnic Logo" 
+               class="brand-logo"
+               onerror="this.style.display='none'">
+          <div class="brand-text">
+            <h1>Agnel Polytechnic</h1>
+            <p>Seminar Hall Management System</p>
+          </div>
+        </a>
+      </div>
+
+      <!-- Mobile Hamburger Button -->
+      <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        &#9776;
+      </button>
+
+      <!-- Navigation Links -->
+      <nav>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="{{ url_for('main.index') }}">Home</a></li>
+          <li><a href="{{ url_for('main.calendar_view') }}">Calendar</a></li>
+          <li><a href="{{ url_for('main.halls_view') }}">Halls</a></li>
+
+          {% if current_user.is_authenticated %}
+            <!-- Faculty Portal Links -->
+            {% if current_user.is_faculty() or current_user.is_admin() %}
+              <li><a href="{{ url_for('faculty.dashboard') }}">Faculty Portal</a></li>
+              <li><a href="{{ url_for('faculty.new_booking') }}">Book Hall</a></li>
+            {% endif %}
+
+            <!-- Principal Portal Links -->
+            {% if current_user.is_principal() or current_user.is_admin() %}
+              <li><a href="{{ url_for('principal.dashboard') }}">Principal Approvals</a></li>
+            {% endif %}
+
+            <!-- Administrator Portal Links -->
+            {% if current_user.is_admin() %}
+              <li><a href="{{ url_for('admin.dashboard') }}">Admin Console</a></li>
+            {% endif %}
+
+            <!-- In-App Notifications -->
+            <li>
+              <a href="{{ url_for('main.notifications') }}">
+                Alerts <span class="badge-counter" id="notifCountBadge" style="display: none;">0</span>
+              </a>
+            </li>
+
+            <!-- Session Controls -->
+            <li><a href="{{ url_for('auth.change_password') }}">Settings</a></li>
+            <li>
+              <form action="{{ url_for('auth.logout') }}" method="POST" style="display: inline;">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <button type="submit" class="btn btn-sm btn-outline" style="color:#e2e8f0; border-color:rgba(255,255,255,0.3);">Sign Out</button>
+              </form>
+            </li>
+          {% else %}
+            <li><a href="{{ url_for('auth.login') }}" class="btn btn-sm btn-accent">Sign In</a></li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="main-wrapper">
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-messages">
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+              <span>{{ message }}</span>
+              <button class="alert-close" aria-label="Dismiss alert">&times;</button>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Institutional Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-col">
+        <h3>Agnel Polytechnic</h3>
+        <p>Agnel Technical Education Complex, Sector 9A, Vashi, Navi Mumbai, Maharashtra 400703.</p>
+        <p style="margin-top: 8px;"><strong>Motto:</strong> Love your neighbour as yourself.</p>
+      </div>
+      <div class="footer-col">
+        <h3>Quick Navigation</h3>
+        <p><a href="{{ url_for('main.index') }}" style="color: #94a3b8;">Home &bull; Overview</a></p>
+        <p><a href="{{ url_for('main.calendar_view') }}" style="color: #94a3b8;">Master Booking Calendar</a></p>
+        <p><a href="{{ url_for('main.halls_view') }}" style="color: #94a3b8;">Seminar Halls & Capacity</a></p>
+      </div>
+      <div class="footer-col">
+        <h3>SHMS Administration</h3>
+        <p>Automated approval workflows, conflict detection, and academic seminar scheduling.</p>
+        <p style="margin-top: 8px;">Designed for Faculty and Administration use.</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; {{ current_year }} Agnel Polytechnic, Vashi. All Rights Reserved &bull; Seminar Hall Management System
+    </div>
+  </footer>
+
+  <!-- Core JavaScript -->
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>

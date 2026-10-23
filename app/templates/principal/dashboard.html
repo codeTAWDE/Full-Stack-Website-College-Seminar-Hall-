@@ -1,0 +1,139 @@
+
+{% extends 'base.html' %}
+{% block title %}Principal Dashboard{% endblock %}
+
+{% block content %}
+<div class="page-header principal-page-header">
+  <div class="principal-heading">
+    <span class="principal-eyebrow">SEMINAR HALL MANAGEMENT SYSTEM</span>
+    <h2>Principal Dashboard</h2>
+    <p>Review booking requests and oversee today's seminar hall schedule.</p>
+  </div>
+
+  <div class="principal-header-actions">
+    <a href="{{ url_for('principal.pending_approvals') }}" class="btn btn-primary">
+      Review Pending ({{ pending_count }})
+    </a>
+    <a href="{{ url_for('principal.approved_bookings') }}" class="btn btn-outline">
+      Manage Approved Bookings
+    </a>
+  </div>
+</div>
+
+<div class="card-grid principal-stats">
+  <div class="card stat-card principal-stat-card">
+    <div class="stat-icon principal-pending-icon">&#9203;</div>
+    <div class="principal-stat-content">
+      <div class="stat-label">Pending Authorizations</div>
+      <div class="stat-value">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ pending_count }}</div>
+      <div class="principal-stat-note">Requests awaiting your decision</div>
+    </div>
+  </div>
+
+  <div class="card stat-card principal-stat-card">
+    <div class="stat-icon principal-approved-icon">&#128197;</div>
+    <div class="principal-stat-content">
+      <div class="stat-label">Events Scheduled Today</div>
+      <div class="stat-value">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ approved_today }}</div>
+      <div class="principal-stat-note">Approved events for today</div>
+    </div>
+  </div>
+</div>
+
+<section class="principal-section">
+  <div class="section-heading">
+    <div>
+      <h3>Reservations Awaiting Your Decision</h3>
+      <p>Review each request before approving or rejecting it.</p>
+    </div>
+    <a href="{{ url_for('principal.pending_approvals') }}" class="btn btn-sm btn-outline">
+      View All ({{ pending_count }}) &rarr;
+    </a>
+  </div>
+
+  <div class="table-responsive">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Reference</th>
+          <th>Faculty Applicant</th>
+          <th>Department</th>
+          <th>Venue</th>
+          <th>Date</th>
+          <th>Time Window</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if pending_list %}
+          {% for b in pending_list %}
+            <tr>
+              <td><code>{{ b.booking_reference }}</code></td>
+              <td>{{ b.applicant.name }}</td>
+              <td>{{ b.applicant.department or 'General' }}</td>
+              <td>{{ b.hall.name }}</td>
+              <td>{{ b.booking_date.strftime('%d %b %Y') }}</td>
+              <td>{{ b.start_time.strftime('%H:%M') }} - {{ b.end_time.strftime('%H:%M') }}</td>
+              <td>
+                <a href="{{ url_for('principal.review_booking', booking_id=b.id) }}" class="btn btn-sm btn-primary">
+                  Review &amp; Decide
+                </a>
+              </td>
+            </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td colspan="7" class="table-empty-state">
+              <strong>All caught up!</strong>
+              <span>No booking requests are currently awaiting authorization.</span>
+            </td>
+          </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="principal-section">
+  <div class="section-heading">
+    <div>
+      <h3>Today's Approved Schedule</h3>
+      <p>Approved seminar hall bookings scheduled for today.</p>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Time</th>
+          <th>Venue</th>
+          <th>Event Title</th>
+          <th>Faculty In-Charge</th>
+          <th>Attendees</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% if today_schedule %}
+          {% for event in today_schedule %}
+            <tr>
+              <td><strong>{{ event.start_time.strftime('%H:%M') }} - {{ event.end_time.strftime('%H:%M') }}</strong></td>
+              <td>{{ event.hall.name }}</td>
+              <td>{{ event.event_title }}</td>
+              <td>{{ event.applicant.name }}</td>
+              <td>{{ event.attendees_count }} Seats</td>
+            </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td colspan="5" class="table-empty-state">
+              <strong>No events scheduled today</strong>
+              <span>Approved seminar hall bookings will appear here.</span>
+            </td>
+          </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

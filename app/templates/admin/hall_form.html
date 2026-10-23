@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h2>{{ title }}</h2>
+    <p>Configure seminar hall metadata and seating parameters.</p>
+  </div>
+  <div>
+    <a href="{{ url_for('admin.halls') }}" class="btn btn-outline">&larr; Back to Halls</a>
+  </div>
+</div>
+
+<div class="form-container">
+  <form method="POST">
+    {{ form.hidden_tag() }}
+
+    <div class="form-group">
+      <label class="form-label" for="name">{{ form.name.label.text }}</label>
+      {{ form.name(class="form-control", placeholder="e.g. Main Auditorium", id="name") }}
+      {% for error in form.name.errors %}
+        <div class="form-error">{{ error }}</div>
+      {% endfor %}
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="code">{{ form.code.label.text }}</label>
+      {{ form.code(class="form-control", placeholder="e.g. AUD-01", id="code") }}
+      {% for error in form.code.errors %}
+        <div class="form-error">{{ error }}</div>
+      {% endfor %}
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="location">{{ form.location.label.text }}</label>
+      {{ form.location(class="form-control", placeholder="e.g. Engineering Block, Ground Floor", id="location") }}
+      {% for error in form.location.errors %}
+        <div class="form-error">{{ error }}</div>
+      {% endfor %}
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="capacity">{{ form.capacity.label.text }}</label>
+      {{ form.capacity(class="form-control", type="number", min="10", id="capacity") }}
+      {% for error in form.capacity.errors %}
+        <div class="form-error">{{ error }}</div>
+      {% endfor %}
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="description">{{ form.description.label.text }}</label>
+      {{ form.description(class="form-control", rows=3, placeholder="Details on projection, audio, air conditioning.", id="description") }}
+      {% for error in form.description.errors %}
+        <div class="form-error">{{ error }}</div>
+      {% endfor %}
+    </div>
+
+    <div class="form-check">
+      {{ form.is_active(id="is_active") }}
+      <label for="is_active" style="font-weight: 500;">{{ form.is_active.label.text }}</label>
+    </div>
+
+    <button type="submit" class="btn btn-primary" style="width: 100%;">Save Seminar Hall</button>
+  </form>
+</div>
+{% endblock %}

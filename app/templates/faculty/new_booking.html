@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block title %}Request Seminar Hall{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h2>New Seminar Hall Reservation</h2>
+    <p>Submit an event reservation request for Principal review and authorization.</p>
+  </div>
+  <div>
+    <a href="{{ url_for('faculty.dashboard') }}" class="btn btn-outline">&larr; Back to Dashboard</a>
+  </div>
+</div>
+
+<div class="form-container" style="max-width: 680px;">
+  <form method="POST">
+    {{ form.hidden_tag() }}
+
+    <div class="form-group">
+      <label class="form-label" for="hall_id">{{ form.hall_id.label.text }}</label>
+      {{ form.hall_id(class="form-control", id="hall_id") }}
+      {% for error in form.hall_id.errors %}
+        <div class="form-error">{{ error }}</div>
+      {% endfor %}
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="event_title">{{ form.event_title.label.text }}</label>
+      {{ form.event_title(class="form-control", placeholder="e.g. AI & Robotics Guest Lecture", id="event_title") }}
+      {% for error in form.event_title.errors %}
+        <div class="form-error">{{ error }}</div>
+      {% endfor %}
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="description">{{ form.description.label.text }}</label>
+      {{ form.description(class="form-control", rows=4, placeholder="Provide an outline of the event, department, and AV equipment needed.", id="description") }}
+      {% for error in form.description.errors %}
+        <div class="form-error">{{ error }}</div>
+      {% endfor %}
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="attendees_count">{{ form.attendees_count.label.text }}</label>
+      {{ form.attendees_count(class="form-control", type="number", min="1", id="attendees_count") }}
+      {% for error in form.attendees_count.errors %}
+        <div class="form-error">{{ error }}</div>
+      {% endfor %}
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="booking_date">{{ form.booking_date.label.text }}</label>
+      {{ form.booking_date(class="form-control", type="date", id="booking_date") }}
+      {% for error in form.booking_date.errors %}
+        <div class="form-error">{{ error }}</div>
+      {% endfor %}
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+      <div class="form-group">
+        <label class="form-label" for="start_time">{{ form.start_time.label.text }}</label>
+        {{ form.start_time(class="form-control", type="time", id="start_time") }}
+        {% for error in form.start_time.errors %}
+          <div class="form-error">{{ error }}</div>
+        {% endfor %}
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="end_time">{{ form.end_time.label.text }}</label>
+        {{ form.end_time(class="form-control", type="time", id="end_time") }}
+        {% for error in form.end_time.errors %}
+          <div class="form-error">{{ error }}</div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+      Submit Request for Principal Review
+    </button>
+  </form>
+</div>
+{% endblock %}

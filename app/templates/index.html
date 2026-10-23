@@ -1,0 +1,391 @@
+{% extends 'base.html' %}
+{% block title %}Agnel Polytechnic &bull; Official Seminar Hall Reservation Portal{% endblock %}
+
+{% block content %}
+<div class="home-page">
+
+  <!-- =========================================================================
+       SECTION 1: HERO SECTION
+       ========================================================================= -->
+  <section class="home-hero" aria-labelledby="hero-heading">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="hero-badge-dot"></span>
+        <span>Agnel Technical Education Complex &bull; Vashi</span>
+      </div>
+      
+      <h1 id="hero-heading" class="hero-title">
+        Your Campus Seminar Hall, <span class="highlight-gold">Made Easy to Book.</span>
+      </h1>
+      
+      <p class="hero-lead">
+        A centralized institutional reservation portal for faculty and departments. Streamlining lecture hall scheduling, Principal approvals, and AV-equipped academic event coordination.
+      </p>
+
+      <div class="hero-actions">
+        {% if current_user.is_authenticated %}
+          {% if current_user.is_faculty() or current_user.is_admin() %}
+            <a href="{{ url_for('faculty.new_booking') }}" class="btn btn-primary">
+              Request a Booking &rarr;
+            </a>
+          {% elif current_user.is_principal() %}
+            <a href="{{ url_for('principal.dashboard') }}" class="btn btn-primary">
+              Review Pending Approvals &rarr;
+            </a>
+          {% else %}
+            <a href="{{ url_for('main.calendar_view') }}" class="btn btn-primary">
+              View Master Schedule &rarr;
+            </a>
+          {% endif %}
+        {% else %}
+          <a href="{{ url_for('auth.login') }}" class="btn btn-primary">
+            Request a Booking &rarr;
+          </a>
+        {% endif %}
+
+        <a href="{{ url_for('main.calendar_view') }}" class="btn btn-outline">
+          View Master Calendar &rarr;
+        </a>
+      </div>
+
+      <!-- Quick Highlights Bar -->
+      <div class="hero-quick-stats">
+        <div class="quick-stat-item">
+          <span class="quick-stat-num">{% if halls %}{{ halls[0].capacity }}{% else %}300{% endif %} Seats</span>
+          <span class="quick-stat-label">Seating Capacity</span>
+        </div>
+        <div class="quick-stat-item">
+          <span class="quick-stat-num">4th Floor</span>
+          <span class="quick-stat-label">Agnel Polytechnic Main Campus</span>
+        </div>
+        <div class="quick-stat-item">
+          <span class="quick-stat-num">Smart AV</span>
+          <span class="quick-stat-label">Acoustics, Projection &amp; Mic</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =========================================================================
+       SECTION 2: INSTITUTIONAL IDENTITY & ETHOS
+       ========================================================================= -->
+  <section class="dignitary-section" aria-labelledby="dignitaries-heading">
+    <div class="section-header text-center">
+      <span class="section-kicker">Guiding Values &amp; Governance</span>
+      <h2 id="dignitaries-heading" class="section-title">Institutional Leadership &amp; Ethos</h2>
+      <p class="section-subtitle">Dedicated to academic excellence, disciplined administration, and moral service across Agnel Polytechnic.</p>
+    </div>
+
+    <div class="dignitary-grid">
+      <!-- Father Agnel Card -->
+      <div class="dignitary-card">
+        <div class="dignitary-photo-wrap">
+          <img src="{{ url_for('static', filename='images/father-agnel.jpeg') }}" 
+               alt="Ven. Fr. Agnel Gustavo de Souza" 
+               class="dignitary-photo"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="dignitary-avatar-fallback" style="display: none;">FA</div>
+        </div>
+        <h3 class="dignitary-name">Ven. Fr. Agnel</h3>
+        <p class="dignitary-role">Patron &amp; Inspiration</p>
+        <blockquote class="dignitary-quote">
+          &ldquo;Love your neighbour as yourself.&rdquo;
+        </blockquote>
+        <p class="dignitary-desc">
+          Guiding our academic community with dedication and service. Inspiring holistic education, technical competence, and moral integrity for all students and faculty.
+        </p>
+      </div>
+
+      <!-- Principal's Office Card -->
+      <div class="dignitary-card">
+        <div class="dignitary-photo-wrap">
+          <img src="{{ url_for('static', filename='images/principal.png') }}" 
+               alt="Principal" 
+               class="dignitary-photo"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="dignitary-avatar-fallback" style="display: none;">P</div>
+        </div>
+        <h3 class="dignitary-name">Principal&rsquo;s Office</h3>
+        <p class="dignitary-role">Executive Authorization</p>
+        <div class="dignitary-badge-wrap">
+          <span class="dignitary-badge-label">Institutional Governance</span>
+        </div>
+        <p class="dignitary-desc">
+          Ensuring transparent, conflict-free allocation of institutional venues for lectures, symposia, and workshops. Upholding academic priorities across all departments.
+        </p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =========================================================================
+       SECTION 3: FEATURED SEMINAR HALL — ONE HALL ONLY
+       ========================================================================= -->
+  <section class="featured-hall-section" aria-labelledby="hall-heading">
+    <div class="section-header">
+      <div class="section-header-left">
+        <span class="section-kicker">Campus Venue Showcase</span>
+        <h2 id="hall-heading" class="section-title">Our Seminar Hall</h2>
+        <p class="section-subtitle">
+          The central academic venue at Agnel Polytechnic for technical conferences, workshops, guest lectures, and departmental presentations.
+        </p>
+      </div>
+      <div class="section-header-right">
+        <span class="badge badge-active"><span class="badge-dot-green"></span> Operational Venue</span>
+      </div>
+    </div>
+
+    {% set hall = halls[0] if halls else none %}
+    {% if hall %}
+      <div class="hall-showcase-card">
+        <!-- 16:9 Featured Photo Container -->
+        <div class="hall-photo-frame">
+          <!-- =================================================================
+               SEMINAR HALL PHOTOGRAPH PLACEHOLDER:
+               To display your real seminar hall photograph, drop your photo file into:
+               app/static/images/seminar-hall.jpeg
+               The system automatically renders the real photograph in 16:9 aspect ratio.
+               ================================================================= -->
+          <img src="{{ url_for('static', filename='images/seminar-hall.jpeg') }}" 
+               alt="{{ hall.name }}" 
+               class="hall-featured-img"
+               onload="var fb = document.getElementById('hallPhotoFallback'); if (fb) fb.style.display='none';"
+               onerror="this.style.display='none'; var fb = document.getElementById('hallPhotoFallback'); if (fb) fb.style.display='flex';">
+
+          <!-- Architectural fallback placeholder shown until seminar-hall.jpeg is added -->
+          <div id="hallPhotoFallback" class="hall-placeholder-view">
+            <div class="placeholder-icon-box">
+              <svg class="placeholder-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                <line x1="8" y1="21" x2="16" y2="21"></line>
+                <line x1="12" y1="17" x2="12" y2="21"></line>
+              </svg>
+            </div>
+            <h4 class="placeholder-title">Seminar Hall Photograph</h4>
+            <p class="placeholder-location">{{ hall.name }} &bull; {{ hall.location }}</p>
+            <span class="placeholder-hint">Ready for <code>app/static/images/seminar-hall.jpeg</code></span>
+          </div>
+
+          <div class="hall-photo-badge">
+            <span class="hall-code-tag">{{ hall.code }}</span>
+          </div>
+        </div>
+
+        <!-- Hall Details & Information -->
+        <div class="hall-info-body">
+          <div class="hall-header-row">
+            <div>
+              <h3 class="hall-title">{{ hall.name }}</h3>
+              <p class="hall-location">
+                <svg class="hall-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                {{ hall.location }}
+              </p>
+            </div>
+            <div class="hall-capacity-pill">
+              <span class="capacity-val">{{ hall.capacity }}</span>
+              <span class="capacity-lbl">Seating Capacity</span>
+            </div>
+          </div>
+
+          <div class="hall-description">
+            <p>{{ hall.description or "A dedicated institutional facility for conducting technical seminars, workshops, guest lectures, project presentations, and academic events. The hall provides an environment for students and faculty members to exchange knowledge, explore emerging technologies, and develop communication skills." }}</p>
+          </div>
+
+          <!-- Integrated Facilities & Amenities -->
+          <div class="hall-amenities-wrap">
+            <h4 class="amenities-title">Integrated Facilities &amp; Amenities</h4>
+            <div class="amenities-grid">
+              <div class="amenity-chip">
+                <span class="amenity-icon">📽️</span>
+                <span>Smart Projection &amp; Screen</span>
+              </div>
+              <div class="amenity-chip">
+                <span class="amenity-icon">🔊</span>
+                <span>Acoustic Audio &amp; Microphones</span>
+              </div>
+              <div class="amenity-chip">
+                <span class="amenity-icon">❄️</span>
+                <span>Air Conditioned Seating</span>
+              </div>
+              <div class="amenity-chip">
+                <span class="amenity-icon">🎙️</span>
+                <span>Elevated Stage &amp; Podium</span>
+              </div>
+              <div class="amenity-chip">
+                <span class="amenity-icon">📶</span>
+                <span>Campus Wi-Fi Connectivity</span>
+              </div>
+              <div class="amenity-chip">
+                <span class="amenity-icon">⚡</span>
+                <span>Power Backup / Inverter Support</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom Action Row -->
+          <div class="hall-action-row">
+            <div class="hall-status-note">
+              <span class="status-indicator-dot"></span>
+              <span>Available for Academic &amp; Departmental Bookings</span>
+            </div>
+            <div>
+              {% if current_user.is_authenticated and (current_user.is_faculty() or current_user.is_admin()) %}
+                <a href="{{ url_for('faculty.new_booking') }}" class="btn btn-primary">
+                  Request Venue Booking &rarr;
+                </a>
+              {% elif not current_user.is_authenticated %}
+                <a href="{{ url_for('auth.login') }}" class="btn btn-primary">
+                  Sign In to Request Booking &rarr;
+                </a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <div class="hall-empty-state card">
+        <p style="color: var(--text-muted); font-weight: 500;">No seminar hall record is currently configured in the database.</p>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 6px;">Please contact the administrator to initialize seminar hall parameters.</p>
+      </div>
+    {% endif %}
+  </section>
+
+
+  <!-- =========================================================================
+       SECTION 4: HOW IT WORKS (3-STEP RESERVATION WORKFLOW)
+       ========================================================================= -->
+  <section class="workflow-section" aria-labelledby="workflow-heading">
+    <div class="section-header text-center">
+      <span class="section-kicker">Reservation Workflow</span>
+      <h2 id="workflow-heading" class="section-title">How Booking Works</h2>
+      <p class="section-subtitle">
+        A structured, conflict-free reservation workflow ensuring proper academic priority and administrative coordination.
+      </p>
+    </div>
+
+    <div class="workflow-grid">
+      <!-- Step 1 -->
+      <div class="workflow-step-card">
+        <div class="step-badge">01</div>
+        <h3 class="step-title">Submit a Request</h3>
+        <p class="step-desc">
+          Faculty members log in, specify the desired date and time window, describe event objectives, and state required AV equipment.
+        </p>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="workflow-step-card">
+        <div class="step-badge">02</div>
+        <h3 class="step-title">Principal&rsquo;s Approval</h3>
+        <p class="step-desc">
+          The Principal's Office reviews each application, checks schedule availability, validates academic priority, and resolves conflicts.
+        </p>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="workflow-step-card">
+        <div class="step-badge">03</div>
+        <h3 class="step-title">Confirmed Booking</h3>
+        <p class="step-desc">
+          Upon executive approval, the slot is locked on the master calendar, and automated email and in-app notifications are delivered.
+        </p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =========================================================================
+       SECTION 5: UPCOMING APPROVED EVENTS
+       ========================================================================= -->
+  <section class="events-section" aria-labelledby="events-heading">
+    <div class="section-header">
+      <div class="section-header-left">
+        <span class="section-kicker">Official Schedule</span>
+        <h2 id="events-heading" class="section-title">Upcoming Approved Events</h2>
+        <p class="section-subtitle">Confirmed academic sessions and symposia scheduled at the seminar hall.</p>
+      </div>
+      <div class="section-header-right">
+        <a href="{{ url_for('main.calendar_view') }}" class="btn btn-sm btn-outline">
+          View Master Calendar &rarr;
+        </a>
+      </div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th scope="col" style="min-width: 130px;">Date</th>
+              <th scope="col" style="min-width: 140px;">Time Window</th>
+              <th scope="col" style="min-width: 180px;">Venue</th>
+              <th scope="col" style="min-width: 220px;">Event Title</th>
+              <th scope="col" style="min-width: 110px;">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for event in upcoming_events %}
+              <tr>
+                <td><strong>{{ event.booking_date.strftime('%d %b %Y') }}</strong></td>
+                <td>{{ event.start_time.strftime('%H:%M') }} &ndash; {{ event.end_time.strftime('%H:%M') }}</td>
+                <td>{{ event.hall.name }}</td>
+                <td>
+                  {% if current_user.is_authenticated %}
+                    <span class="event-title-text">{{ event.event_title }}</span>
+                  {% else %}
+                    <span class="event-private-text">Institutional Booking</span>
+                  {% endif %}
+                </td>
+                <td><span class="badge badge-approved">Approved</span></td>
+              </tr>
+            {% else %}
+              <tr>
+                <td colspan="5" class="table-empty-row">
+                  <div class="empty-state-wrap">
+                    <p class="empty-main">No approved events scheduled for the coming week.</p>
+                    <p class="empty-sub">The seminar hall is currently open for upcoming faculty reservation requests.</p>
+                  </div>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =========================================================================
+       SECTION 6: FINAL INSTITUTIONAL CALL TO ACTION
+       ========================================================================= -->
+  <section class="cta-banner-section" aria-labelledby="cta-heading">
+    <div class="cta-banner-card">
+      <div class="cta-content">
+        <h2 id="cta-heading" class="cta-title">Ready to Organize an Academic Event?</h2>
+        <p class="cta-text">
+          Faculty members can reserve the seminar hall online with automated conflict checks and seamless executive approval.
+        </p>
+      </div>
+      <div class="cta-actions">
+        {% if current_user.is_authenticated %}
+          {% if current_user.is_faculty() or current_user.is_admin() %}
+            <a href="{{ url_for('faculty.new_booking') }}" class="btn btn-gold">
+              Submit Reservation Request &rarr;
+            </a>
+          {% else %}
+            <a href="{{ url_for('main.calendar_view') }}" class="btn btn-gold">
+              Check Hall Schedule &rarr;
+            </a>
+          {% endif %}
+        {% else %}
+          <a href="{{ url_for('auth.login') }}" class="btn btn-gold">
+            Sign In to Reserve Venue &rarr;
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+</div>
+{% endblock %}

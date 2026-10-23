@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h2>{{ title }}</h2>
+    <p>Configure credentials and system authorization permissions.</p>
+  </div>
+  <div>
+    <a href="{{ url_for('admin.users') }}" class="btn btn-outline">&larr; Back to Users</a>
+  </div>
+</div>
+
+<div class="form-container">
+  <form method="POST">
+    {{ form.hidden_tag() }}
+
+    <div class="form-group">
+      <label class="form-label" for="name">{{ form.name.label.text }}</label>
+      {{ form.name(class="form-control", id="name") }}
+      {% for error in form.name.errors %}
+        <div class="form-error">{{ error }}</div>
+      {% endfor %}
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="email">{{ form.email.label.text }}</label>
+      {{ form.email(class="form-control", id="email") }}
+      {% for error in form.email.errors %}
+        <div class="form-error">{{ error }}</div>
+      {% endfor %}
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="role">{{ form.role.label.text }}</label>
+      {{ form.role(class="form-control", id="role") }}
+      {% for error in form.role.errors %}
+        <div class="form-error">{{ error }}</div>
+      {% endfor %}
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="department">{{ form.department.label.text }}</label>
+      {{ form.department(class="form-control", placeholder="e.g. Computer Engineering", id="department") }}
+      {% for error in form.department.errors %}
+        <div class="form-error">{{ error }}</div>
+      {% endfor %}
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="phone">{{ form.phone.label.text }}</label>
+      {{ form.phone(class="form-control", placeholder="e.g. +91 9876543210", id="phone") }}
+      {% for error in form.phone.errors %}
+        <div class="form-error">{{ error }}</div>
+      {% endfor %}
+    </div>
+
+    {% if form.password is defined %}
+      <div class="form-group">
+        <label class="form-label" for="password">{{ form.password.label.text }}</label>
+        {{ form.password(class="form-control", id="password") }}
+        {% for error in form.password.errors %}
+          <div class="form-error">{{ error }}</div>
+        {% endfor %}
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="confirm_password">{{ form.confirm_password.label.text }}</label>
+        {{ form.confirm_password(class="form-control", id="confirm_password") }}
+        {% for error in form.confirm_password.errors %}
+          <div class="form-error">{{ error }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {% if form.is_active is defined %}
+      <div class="form-check">
+        {{ form.is_active(id="is_active") }}
+        <label for="is_active" style="font-weight: 500;">{{ form.is_active.label.text }}</label>
+      </div>
+    {% endif %}
+
+    <button type="submit" class="btn btn-primary" style="width: 100%;">Save Account</button>
+  </form>
+</div>
+{% endblock %}

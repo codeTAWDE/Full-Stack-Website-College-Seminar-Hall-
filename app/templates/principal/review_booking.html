@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block title %}Review Booking {{ booking.booking_reference }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h2>Booking Authorization Review</h2>
+    <p>Reference: <code>{{ booking.booking_reference }}</code></p>
+  </div>
+  <div>
+    <a href="{{ url_for('principal.pending_approvals') }}" class="btn btn-outline">&larr; Back to Pending List</a>
+  </div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
+  <!-- Booking & Hall Summary Card -->
+  <div class="card">
+    <h3 class="card-title" style="border-bottom: 2px solid var(--border-subtle); padding-bottom: 8px; margin-bottom: 16px;">
+      Event Information
+    </h3>
+    <p style="margin-bottom: 12px;"><strong>Event Title:</strong> {{ booking.event_title }}</p>
+    <p style="margin-bottom: 12px;"><strong>Applicant:</strong> {{ booking.applicant.name }} ({{ booking.applicant.email }})</p>
+    <p style="margin-bottom: 12px;"><strong>Department:</strong> {{ booking.applicant.department or 'N/A' }}</p>
+    <p style="margin-bottom: 12px;"><strong>Target Venue:</strong> {{ booking.hall.name }} (Capacity: {{ booking.hall.capacity }})</p>
+    <p style="margin-bottom: 12px;"><strong>Date:</strong> {{ booking.booking_date.strftime('%A, %d %B %Y') }}</p>
+    <p style="margin-bottom: 12px;"><strong>Time Window:</strong> {{ booking.start_time.strftime('%H:%M') }} - {{ booking.end_time.strftime('%H:%M') }}</p>
+    <p style="margin-bottom: 16px;"><strong>Attendees Count:</strong> {{ booking.attendees_count }} Students/Faculty</p>
+    
+    <h4 style="font-size: 0.9rem; color: var(--brand-primary); margin-bottom: 6px;">Purpose & Description:</h4>
+    <p style="background-color: var(--bg-surface-alt); padding: 12px; border-radius: var(--radius-sm); font-size: 0.9rem;">
+      {{ booking.description or "No description provided." }}
+    </p>
+  </div>
+
+  <!-- Decision Form Card -->
+  <div class="card">
+    <h3 class="card-title" style="border-bottom: 2px solid var(--border-subtle); padding-bottom: 8px; margin-bottom: 16px;">
+      Principal Decision
+    </h3>
+    
+    <form method="POST">
+      {{ form.hidden_tag() }}
+
+      <div class="form-group">
+        <label class="form-label" for="action">{{ form.action.label.text }}</label>
+        {{ form.action(class="form-control", id="action") }}
+        {% for error in form.action.errors %}
+          <div class="form-error">{{ error }}</div>
+        {% endfor %}
+      </div>
+
+      <div class="form-group" id="rejectionReasonGroup">
+        <label class="form-label" for="rejection_reason">{{ form.rejection_reason.label.text }}</label>
+        {{ form.rejection_reason(class="form-control", rows=4, placeholder="Provide a reason if rejecting this request (e.g. Prior academic conflict or maintenance).", id="rejection_reason") }}
+        {% for error in form.rejection_reason.errors %}
+          <div class="form-error">{{ error }}</div>
+        {% endfor %}
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+        Submit Final Decision
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}
