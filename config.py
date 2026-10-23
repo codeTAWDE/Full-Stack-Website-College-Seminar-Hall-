@@ -51,12 +51,13 @@ class TestingConfig(Config):
     TESTING = True
     DEBUG = False
     WTF_CSRF_ENABLED = False
+    SQLALCHEMY_ENGINE_OPTIONS = {}
+
     # Use SQLite in-memory or a dedicated test MySQL database for isolated tests
     SQLALCHEMY_DATABASE_URI = os.environ.get(
-        'TEST_DATABASE_URL', 
+        'TEST_DATABASE_URL',
         'sqlite:///:memory:'
     )
-
 
 class ProductionConfig(Config):
     """Production environment configuration with strict security."""

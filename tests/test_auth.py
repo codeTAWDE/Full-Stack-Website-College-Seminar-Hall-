@@ -1,4 +1,4 @@
-from app.models.user import User
+﻿from app.models.user import User
 
 
 def test_password_hashing():
@@ -12,15 +12,15 @@ def test_password_hashing():
 
 def test_login_page_renders(client):
     """Test that login page loads with 200 OK."""
-    response = client.get('/auth/login')
+    response = client.get('/login')
     assert response.status_code == 200
-    assert b"Staff & Administration Sign In" in response.data
+    assert b"Welcome Back" in response.data
 
 
 def test_login_success_and_logout(client, faculty_user):
     """Verify successful authentication and subsequent logout."""
     # Login
-    response = client.post('/auth/login', data={
+    response = client.post('/login', data={
         'email': 'faculty.test@apv.ac.in',
         'password': 'FacultyPass123!'
     }, follow_redirects=True)
@@ -28,14 +28,14 @@ def test_login_success_and_logout(client, faculty_user):
     assert b"Welcome back, Test Faculty!" in response.data
 
     # Logout
-    logout_response = client.post('/auth/logout', follow_redirects=True)
+    logout_response = client.post('/logout', follow_redirects=True)
     assert logout_response.status_code == 200
     assert b"You have been signed out successfully." in logout_response.data
 
 
 def test_login_invalid_credentials(client, faculty_user):
     """Verify failed login attempt with wrong password."""
-    response = client.post('/auth/login', data={
+    response = client.post('/login', data={
         'email': 'faculty.test@apv.ac.in',
         'password': 'WrongPassword123'
     }, follow_redirects=True)
@@ -56,7 +56,7 @@ def test_deactivated_user_cannot_login(client, app):
         db.session.add(deactivated)
         db.session.commit()
 
-    response = client.post('/auth/login', data={
+    response = client.post('/login', data={
         'email': 'inactive@apv.ac.in',
         'password': 'Password123!'
     }, follow_redirects=True)

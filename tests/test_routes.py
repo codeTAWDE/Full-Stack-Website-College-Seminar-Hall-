@@ -1,4 +1,4 @@
-def test_public_pages(client):
+﻿def test_public_pages(client):
     """Verify public endpoints return 200 OK."""
     assert client.get('/').status_code == 200
     assert client.get('/health').status_code == 200
@@ -6,10 +6,10 @@ def test_public_pages(client):
     assert client.get('/halls').status_code == 200
 
 
-def test_faculty_role_access(client, faculty_user):
+def test_faculty_role_access(client, faculty_user, sample_hall):
     """Verify faculty access boundaries."""
     # Authenticate faculty
-    client.post('/auth/login', data={
+    client.post('/login', data={
         'email': 'faculty.test@apv.ac.in',
         'password': 'FacultyPass123!'
     })
@@ -30,7 +30,7 @@ def test_faculty_role_access(client, faculty_user):
 
 def test_principal_role_access(client, principal_user):
     """Verify principal can access approval endpoints."""
-    client.post('/auth/login', data={
+    client.post('/login', data={
         'email': 'principal.test@apv.ac.in',
         'password': 'PrincipalPass123!'
     })
@@ -45,7 +45,7 @@ def test_principal_role_access(client, principal_user):
 
 def test_admin_role_access(client, admin_user):
     """Verify administrator has full system access."""
-    client.post('/auth/login', data={
+    client.post('/login', data={
         'email': 'admin.test@apv.ac.in',
         'password': 'AdminPass123!'
     })
