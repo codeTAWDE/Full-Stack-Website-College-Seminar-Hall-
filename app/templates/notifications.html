@@ -14,7 +14,7 @@
   <ul style="list-style: none;">
     {% if notifications and notifications|length > 0 %}
       {% for n in notifications %}
-        <li style="padding: 16px 20px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; background-color: {{ '#f0f9ff' if not n.is_read else '#ffffff' }};">
+        <li class="notification-item {{ 'notification-unread' if not n.is_read else 'notification-read' }}">
           <div>
             <h4 style="font-size: 1rem; color: #0b2545; margin-bottom: 4px;">{{ n.title }}</h4>
             <p style="font-size: 0.9rem; color: #1e293b; margin-bottom: 4px;">{{ n.message }}</p>

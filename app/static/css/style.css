@@ -5,7 +5,7 @@
 
 :root {
   /* Institutional Palette - Agnel Polytechnic */
-  --brand-primary: #0b2545;       /* Deep Academic Navy */
+  --brand-primary: #0b1e45;       /* Deep Academic Navy */
   --brand-primary-light: #134074; /* Secondary Header Blue */
   --brand-accent: #0077b6;        /* Action Blue */
   --brand-accent-hover: #023e8a;  /* Darker Action Blue */
@@ -131,7 +131,7 @@ a:hover {
 }
 
 .top-bar-title {
-  color: #94a3b8;
+  color: white;
   letter-spacing: 0.5px;
   min-width: 0;
   overflow-wrap: anywhere;
@@ -3005,6 +3005,31 @@ a:hover {
     transition: none !important;
     transform: none !important;
   }
+}
+
+
+
+
+
+
+
+
+
+/* Notifications */
+.notification-item {
+    padding: 16px 20px;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notification-unread {
+    background-color: #f0f9ff;
+}
+
+.notification-read {
+    background-color: #ffffff;
 }
 
 
