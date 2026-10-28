@@ -3042,3 +3042,83 @@ a:hover {
 
 
 
+
+
+
+
+
+/* Admin dashboard — weekly PDF report card */
+.admin-weekly-report-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 12px;
+}
+
+
+.admin-weekly-report-card .card-title {
+    margin: 0;
+    color: var(--brand-primary);
+}
+
+
+.admin-weekly-report-card p {
+    margin: 0 0 6px;
+    line-height: 1.6;
+    color: var(--text-muted, #64748b);
+    text-align: center;
+    width: 100%;
+}
+
+
+.admin-weekly-report-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 10px 16px;
+    border: 1px solid var(--brand-accent);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--brand-primary);
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease,
+                border-color 0.2s ease, transform 0.2s ease;
+}
+
+.admin-weekly-report-btn:hover {
+    background: var(--brand-primary);
+    border-color: var(--brand-primary);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.admin-weekly-report-btn:focus-visible {
+    outline: 3px solid var(--brand-gold);
+    outline-offset: 3px;
+}
+
+@media (max-width: 600px) {
+    .admin-weekly-report-card {
+        align-items: stretch;
+    }
+
+    .admin-weekly-report-btn {
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .admin-weekly-report-btn {
+        transition: none;
+    }
+
+    .admin-weekly-report-btn:hover {
+        transform: none;
+    }
+}

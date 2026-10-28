@@ -1,11 +1,11 @@
-
+﻿
 {% extends 'base.html' %}
 {% block title %}System Administration{% endblock %}
 
 {% block content %}
 <section class="page-header admin-page-header">
   <div class="admin-heading">
-    <span class="admin-eyebrow">AGNEL POLYTECHNIC · SHMS</span>
+    <span class="admin-eyebrow">AGNEL POLYTECHNIC Â· SHMS</span>
     <h2>System Administration</h2>
     <p>Manage accounts, seminar halls, system activity, and reports from one place.</p>
   </div>
@@ -91,14 +91,17 @@
       </a>
     </article>
 
-    <article class="card admin-action-card">
-      <div class="action-icon admin-reports-icon" aria-hidden="true">&#128202;</div>
-      <h3 class="card-title">Utilization Reports</h3>
-      <p>Review seminar hall utilization information and booking statistics.</p>
-      <a href="{{ url_for('admin.reports') }}" class="btn btn-outline">
-        Open Reports <span aria-hidden="true">&rarr;</span>
-      </a>
-    </article>
+
+<article class="card admin-action-card admin-weekly-report-card">
+  <div class="action-icon admin-reports-icon" aria-hidden="true">&#128202;</div>
+  <h3 class="card-title">Utilization Reports</h3>
+  <p>Review seminar hall utilization and download the weekly booking report as a PDF.</p>
+  <a href="{{ url_for('main.weekly_report_pdf') }}"
+     class="btn btn-outline admin-weekly-report-btn">
+    &#128196; Download Weekly PDF Report
+  </a>
+</article>
+
   </div>
 </section>
 
