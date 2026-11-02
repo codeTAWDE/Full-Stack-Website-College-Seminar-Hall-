@@ -18,12 +18,12 @@
 
   <!-- Institutional Top Bar -->
   <div class="top-bar">
-    <div class="top-bar-title">AGNEL TECHNICAL EDUCATION COMPLEX &bull; VASHI, NAVI MUMBAI</div>
+    <div class="top-bar-title">Father Agnel Polytechnic &bull; VASHI, NAVI MUMBAI</div>
     <div>
       {% if current_user.is_authenticated %}
         <span>Signed in as <strong>{{ current_user.name }}</strong> ({{ current_user.role }})</span>
       {% else %}
-        <span>College Seminar Reservation Portal</span>
+        <span>Tawde Atharva and Advait - AN</span>
       {% endif %}
     </div>
   </div>
@@ -33,7 +33,7 @@
     <div class="nav-container">
       <div class="brand-wrapper">
         <a href="{{ url_for('main.index') }}" style="display: flex; align-items: center; gap: 12px; text-decoration: none; min-width: 0;">
-          <img src="{{ url_for('static', filename='images/agnel-polytechnic-logo.jpeg') }}" 
+          <img src="{{ url_for('static', filename='images/agnel-polytechnic-logo.webp') }}" 
                alt="Agnel Polytechnic Logo" 
                class="brand-logo"
                onerror="this.style.display='none'">
@@ -136,7 +136,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      &copy; {{ current_year }} Agnel Polytechnic, Vashi. All Rights Reserved &bull; Seminar Hall Management System
+      &copy; {{ current_year }} <a href="https://apv.ac.in/"> Agnel Polytechnic, Vashi. </a> All Rights Reserved &bull; Seminar Hall Management System
     </div>
   </footer>
 
