@@ -65,6 +65,19 @@ class ProductionConfig(Config):
     TESTING = False
     SESSION_COOKIE_SECURE = True
 
+    # Secure connection to Aiven MySQL using its CA certificate
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        'pool_recycle': 280,
+        'pool_pre_ping': True,
+        'pool_size': 1,
+        'max_overflow': 0,
+        'connect_args': {
+            'ssl': {
+                'ca': os.path.join(basedir, 'certs', 'ca.pem')
+            }
+        }
+    }
+
 
 config_by_name = {
     'development': DevelopmentConfig,
