@@ -9,10 +9,7 @@
        ========================================================================= -->
   <section class="home-hero" aria-labelledby="hero-heading">
     <div class="hero-content">
-      <div class="hero-badge">
-        <span class="hero-badge-dot"></span>
-        <span>Agnel Technical Education Complex &bull; Vashi</span>
-      </div>
+      
       
       <h1 id="hero-heading" class="hero-title">
         Your Campus Seminar Hall, <span class="highlight-gold">Made Easy to Book.</span>
@@ -56,7 +53,7 @@
         </div>
         <div class="quick-stat-item">
           <span class="quick-stat-num">4th Floor</span>
-          <span class="quick-stat-label">Agnel Polytechnic Main Campus</span>
+          <span class="quick-stat-label">Agnel Polytechnic Building</span>
         </div>
         <div class="quick-stat-item">
           <span class="quick-stat-num">Smart AV</span>
@@ -74,7 +71,7 @@
     <div class="section-header text-center">
       <span class="section-kicker">Guiding Values &amp; Governance</span>
       <h2 id="dignitaries-heading" class="section-title">Institutional Leadership &amp; Ethos</h2>
-      <p class="section-subtitle">Dedicated to academic excellence, disciplined administration, and moral service across Agnel Polytechnic.</p>
+      <p class="section-subtitle">Dedicated to academic excellence, disciplined administration, and moral service across Father Agnel Polytechnic.</p>
     </div>
 
     <div class="dignitary-grid">
@@ -87,7 +84,7 @@
                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
           <div class="dignitary-avatar-fallback" style="display: none;">FA</div>
         </div>
-        <h3 class="dignitary-name">Ven. Fr. Agnel</h3>
+        <h3 class="dignitary-name"> Fr. Peter D'souza</h3>
         <p class="dignitary-role">Patron &amp; Inspiration</p>
         <blockquote class="dignitary-quote">
           &ldquo;Love your neighbour as yourself.&rdquo;
@@ -106,8 +103,8 @@
                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
           <div class="dignitary-avatar-fallback" style="display: none;">P</div>
         </div>
-        <h3 class="dignitary-name">Principal&rsquo;s Office</h3>
-        <p class="dignitary-role">Executive Authorization</p>
+        <h3 class="dignitary-name">Mrs. Saly Antony</h3>
+        <p class="dignitary-role">Honourable Principal</p>
         <div class="dignitary-badge-wrap">
           <span class="dignitary-badge-label">Institutional Governance</span>
         </div>
@@ -147,26 +144,102 @@
                app/static/images/seminar-hall.jpeg
                The system automatically renders the real photograph in 16:9 aspect ratio.
                ================================================================= -->
-          <img src="{{ url_for('static', filename='images/seminar-hall.jpeg') }}" 
-               alt="{{ hall.name }}" 
-               class="hall-featured-img"
-               onload="var fb = document.getElementById('hallPhotoFallback'); if (fb) fb.style.display='none';"
-               onerror="this.style.display='none'; var fb = document.getElementById('hallPhotoFallback'); if (fb) fb.style.display='flex';">
+          <!-- =========================================================
+     FOUR-IMAGE SEMINAR HALL GALLERY
+     ========================================================= -->
 
-          <!-- Architectural fallback placeholder shown until seminar-hall.jpeg is added -->
-          <div id="hallPhotoFallback" class="hall-placeholder-view">
-            <div class="placeholder-icon-box">
-              <svg class="placeholder-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                <line x1="8" y1="21" x2="16" y2="21"></line>
-                <line x1="12" y1="17" x2="12" y2="21"></line>
-              </svg>
-            </div>
-            <h4 class="placeholder-title">Seminar Hall Photograph</h4>
-            <p class="placeholder-location">{{ hall.name }} &bull; {{ hall.location }}</p>
-            <span class="placeholder-hint">Ready for <code>app/static/images/seminar-hall.jpeg</code></span>
-          </div>
+<!-- =========================================================
+     SEMINAR HALL — PREMIUM FOUR-PANEL GALLERY
+     Replace placeholder panels with real photographs later.
+     ========================================================= -->
 
+<div class="hall-image-gallery">
+
+    <!-- Featured horizontal panel -->
+    <button type="button"
+            class="hall-gallery-item hall-gallery-featured"
+            data-gallery-index="0"
+            aria-label="Preview featured seminar hall image">
+
+        <span class="hall-placeholder-art">
+            <svg viewBox="0 0 120 80" aria-hidden="true">
+                <path d="M12 68V25L60 7L108 25V68" />
+                <path d="M23 68V34L60 19L97 34V68" />
+                <path d="M43 68V48H77V68" />
+                <path d="M7 68H113M31 39H89" />
+                <path d="M60 19V68" />
+            </svg>
+        </span>
+
+        <span class="hall-placeholder-caption">
+            <span class="hall-placeholder-number">01 / FEATURED</span>
+            <span class="hall-placeholder-title">Seminar Hall Overview</span>
+            <span class="hall-placeholder-hint">Photograph coming soon</span>
+        </span>
+
+        <span class="hall-gallery-expand" aria-hidden="true">↗</span>
+    </button>
+
+    <!-- Supporting horizontal panels -->
+    <div class="hall-gallery-supporting">
+
+        <button type="button"
+                class="hall-gallery-item"
+                data-gallery-index="1"
+                aria-label="Preview seminar hall image 2">
+            <span class="hall-placeholder-art">
+                <svg viewBox="0 0 120 80" aria-hidden="true">
+                    <path d="M10 65H110M18 65V25L60 10L102 25V65" />
+                    <path d="M28 65V38H92V65M38 38V65M60 38V65M82 38V65" />
+                    <path d="M7 65H113" />
+                </svg>
+            </span>
+            <span class="hall-placeholder-caption">
+                <span class="hall-placeholder-number">02</span>
+                <span class="hall-placeholder-title">Seating &amp; Interiors</span>
+            </span>
+            <span class="hall-gallery-expand" aria-hidden="true">↗</span>
+        </button>
+
+        <button type="button"
+                class="hall-gallery-item"
+                data-gallery-index="2"
+                aria-label="Preview seminar hall image 3">
+            <span class="hall-placeholder-art">
+                <svg viewBox="0 0 120 80" aria-hidden="true">
+                    <path d="M12 65H108M20 65V20H100V65" />
+                    <path d="M31 31H89V52H31Z" />
+                    <path d="M45 65V57H75V65M60 20V52" />
+                    <path d="M7 65H113" />
+                </svg>
+            </span>
+            <span class="hall-placeholder-caption">
+                <span class="hall-placeholder-number">03</span>
+                <span class="hall-placeholder-title">Stage &amp; Presentation</span>
+            </span>
+            <span class="hall-gallery-expand" aria-hidden="true">↗</span>
+        </button>
+
+        <button type="button"
+                class="hall-gallery-item"
+                data-gallery-index="3"
+                aria-label="Preview seminar hall image 4">
+            <span class="hall-placeholder-art">
+                <svg viewBox="0 0 120 80" aria-hidden="true">
+                    <path d="M12 65H108M20 65V28L60 10L100 28V65" />
+                    <path d="M30 39H90M30 50H90M30 61H90" />
+                    <path d="M43 39V65M60 39V65M77 39V65" />
+                </svg>
+            </span>
+            <span class="hall-placeholder-caption">
+                <span class="hall-placeholder-number">04</span>
+                <span class="hall-placeholder-title">Facilities &amp; Amenities</span>
+            </span>
+            <span class="hall-gallery-expand" aria-hidden="true">↗</span>
+        </button>
+
+    </div>
+</div>
           <div class="hall-photo-badge">
             <span class="hall-code-tag">{{ hall.code }}</span>
           </div>
@@ -362,7 +435,7 @@
   <section class="cta-banner-section" aria-labelledby="cta-heading">
     <div class="cta-banner-card">
       <div class="cta-content">
-        <h2 id="cta-heading" class="cta-title">Ready to Organize an Academic Event?</h2>
+        <h2 id="cta-heading" class="cta-title">Ready to Organize an Event?</h2>
         <p class="cta-text">
           Faculty members can reserve the seminar hall online with automated conflict checks and seamless executive approval.
         </p>

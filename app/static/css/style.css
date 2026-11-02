@@ -3122,3 +3122,426 @@ a:hover {
         transform: none;
     }
 }
+
+
+
+
+
+
+
+
+
+/* =========================================================
+   HOME HERO — CENTER ALIGNMENT
+   Keeps existing responsive layouts intact.
+   ========================================================= */
+
+.home-page .hero-badge {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.home-page .hero-title,
+.home-page .hero-lead {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.home-page .hero-actions {
+    justify-content: center;
+}
+
+.home-page .hero-quick-stats {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.home-page .quick-stat-item {
+    align-items: center;
+    text-align: center;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================================================
+   DIGNITARY PHOTOS — INCREASED SIZE
+   ========================================================= */
+
+.home-page .dignitary-photo-wrap {
+    width: 200px;
+    height: 200px;
+}
+
+.home-page .dignitary-photo,
+.home-page .dignitary-avatar-fallback {
+    width: 200px;
+    height: 200px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .home-page .dignitary-photo-wrap {
+        width: 160px;
+        height: 160px;
+    }
+
+    .home-page .dignitary-photo,
+    .home-page .dignitary-avatar-fallback {
+        width: 160px;
+        height: 160px;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+/* =========================================================
+   SEMINAR HALL — PREMIUM RESPONSIVE GALLERY
+   ========================================================= */
+
+/* Let the gallery stretch to the full height of its grid cell */
+.home-page .hall-showcase-card {
+    align-items: stretch;
+}
+
+.home-page .hall-photo-frame {
+    aspect-ratio: auto;
+    min-height: 100%;
+    align-self: stretch;
+    display: block;
+    border-right: 1px solid var(--border-color);
+    border-bottom: none;
+}
+
+/* Gallery structure */
+.home-page .hall-image-gallery {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1.45fr) minmax(0, 1fr);
+    gap: 12px;
+    padding: 16px;
+    z-index: 2;
+    min-width: 0;
+    min-height: 0;
+}
+
+/* Featured image occupies the upper area */
+.home-page .hall-gallery-featured {
+    min-height: 0;
+}
+
+/* Three horizontal supporting images */
+.home-page .hall-gallery-supporting {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    min-width: 0;
+    min-height: 0;
+}
+
+.home-page .hall-gallery-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    padding: 16px;
+    overflow: hidden;
+    text-align: left;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 14px;
+    background:
+        radial-gradient(ellipse at 75% 20%, rgba(66, 132, 190, 0.38), transparent 48%),
+        linear-gradient(135deg, #163b60 0%, #0b2545 58%, #071a31 100%);
+    cursor: pointer;
+    isolation: isolate;
+    transition:
+        border-color 0.25s ease,
+        box-shadow 0.25s ease,
+        transform 0.25s ease;
+}
+
+.home-page .hall-gallery-item::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    opacity: 0.35;
+    background-image:
+        linear-gradient(rgba(255,255,255,0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px);
+    background-size: 28px 28px;
+    mask-image: linear-gradient(to bottom, black, transparent 85%);
+}
+
+.home-page .hall-gallery-item::after {
+    content: "";
+    position: absolute;
+    inset: 35% 0 0;
+    z-index: -1;
+    background: linear-gradient(transparent, rgba(3, 15, 29, 0.94));
+}
+
+.home-page .hall-gallery-item:hover {
+    border-color: rgba(197, 155, 39, 0.75);
+    box-shadow: 0 12px 28px rgba(4, 20, 38, 0.24);
+    transform: translateY(-3px);
+}
+
+.home-page .hall-gallery-item:focus-visible {
+    outline: 3px solid var(--brand-gold);
+    outline-offset: 3px;
+}
+
+/* Architectural line-art placeholders */
+.home-page .hall-placeholder-art {
+    position: absolute;
+    inset: 8% 12% 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.home-page .hall-placeholder-art svg {
+    width: min(65%, 230px);
+    height: 100%;
+    overflow: visible;
+    fill: none;
+    stroke: rgba(213, 230, 246, 0.62);
+    stroke-width: 1.15;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.15));
+    transition: transform 0.35s ease, stroke 0.35s ease;
+}
+
+.home-page .hall-gallery-item:hover .hall-placeholder-art svg {
+    transform: scale(1.07);
+    stroke: rgba(255, 255, 255, 0.9);
+}
+
+/* Captions */
+.home-page .hall-placeholder-caption {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    max-width: 100%;
+}
+
+.home-page .hall-placeholder-number {
+    color: #e4bd5c;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+}
+
+.home-page .hall-placeholder-title {
+    color: #ffffff;
+    font-size: 0.95rem;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.home-page .hall-placeholder-hint {
+    color: rgba(226, 237, 248, 0.7);
+    font-size: 0.74rem;
+}
+
+.home-page .hall-gallery-featured .hall-placeholder-title {
+    font-size: 1.3rem;
+}
+
+/* Expand indicator */
+.home-page .hall-gallery-expand {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border: 1px solid rgba(255,255,255,0.22);
+    border-radius: 50%;
+    background: rgba(4, 20, 38, 0.48);
+    color: #ffffff;
+    font-size: 1.1rem;
+    transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.home-page .hall-gallery-item:hover .hall-gallery-expand {
+    background: rgba(197, 155, 39, 0.9);
+    transform: rotate(45deg);
+}
+
+.home-page .hall-photo-badge {
+    z-index: 3;
+}
+
+/* Tablet: stack gallery above the information panel */
+@media (max-width: 991px) {
+    .home-page .hall-photo-frame {
+        min-height: 420px;
+        aspect-ratio: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .home-page .hall-image-gallery {
+        grid-template-rows: minmax(0, 1.4fr) minmax(0, 0.85fr);
+    }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+    .home-page .hall-photo-frame {
+        min-height: 340px;
+    }
+
+    .home-page .hall-image-gallery {
+        gap: 9px;
+        padding: 12px;
+        grid-template-rows: minmax(0, 1.35fr) minmax(0, 0.9fr);
+    }
+
+    .home-page .hall-gallery-supporting {
+        gap: 8px;
+    }
+
+    .home-page .hall-gallery-item {
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    .home-page .hall-placeholder-title {
+        font-size: 0.76rem;
+    }
+
+    .home-page .hall-gallery-featured .hall-placeholder-title {
+        font-size: 1.05rem;
+    }
+
+    .home-page .hall-placeholder-hint {
+        font-size: 0.68rem;
+    }
+
+    .home-page .hall-gallery-expand {
+        top: 8px;
+        right: 8px;
+        width: 27px;
+        height: 27px;
+    }
+}
+
+/* Very small phones */
+@media (max-width: 380px) {
+    .home-page .hall-photo-frame {
+        min-height: 310px;
+    }
+
+    .home-page .hall-image-gallery {
+        gap: 7px;
+        padding: 9px;
+    }
+
+    .home-page .hall-gallery-supporting {
+        gap: 6px;
+    }
+
+    .home-page .hall-gallery-item {
+        padding: 7px;
+    }
+
+    .home-page .hall-placeholder-title {
+        font-size: 0.68rem;
+    }
+
+    .home-page .hall-gallery-featured .hall-placeholder-title {
+        font-size: 0.95rem;
+    }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .home-page .hall-gallery-item,
+    .home-page .hall-placeholder-art svg,
+    .home-page .hall-gallery-expand {
+        transition: none !important;
+    }
+
+    .home-page .hall-gallery-item:hover {
+        transform: none;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================================================
+   SEMINAR HALL — CENTERED SECTION HEADING
+   ========================================================= */
+
+.home-page .featured-hall-section > .section-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.home-page .featured-hall-section .section-header-left {
+    width: 100%;
+    max-width: 850px;
+    text-align: center;
+}
+
+.home-page .featured-hall-section .section-kicker,
+.home-page .featured-hall-section .section-title,
+.home-page .featured-hall-section .section-subtitle {
+    text-align: center;
+}
+
+.home-page .featured-hall-section .section-header-right {
+    width: auto;
+    display: flex;
+    justify-content: center;
+}
